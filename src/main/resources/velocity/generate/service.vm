@@ -1,0 +1,75 @@
+package ${genConfig.packageName}.service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import jakarta.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import ${genConfig.packageName}.common.exception.BizException;
+import ${genConfig.packageName}.common.util.CommonFileUtil;
+import ${genConfig.packageName}.common.vo.PaginationVO;
+import ${genConfig.packageName}.vo.${genConfig.tablePascalName}VO;
+import ${genConfig.packageName}.mapper.${genConfig.tablePascalName}Mapper;
+
+@Service
+public class ${genConfig.serviceName} {
+
+	@Resource
+	private ${genConfig.tablePascalName}Mapper ${genConfig.tableAlias}Mapper;
+	
+	private CommonFileUtil fu;
+	
+	private String path = "${genConfig.tableAlias}";
+	
+	public Page<${genConfig.tablePascalName}VO> select${genConfig.tableAlias.toUpperCase()}List(${genConfig.tablePascalName}VO ${genConfig.tableAlias}, PaginationVO page) {
+		if(page != null && page.getPageFlag()) {
+			PageHelper.startPage(page.getPageNum(), page.getPageSize());
+		}
+		return ${genConfig.tableAlias}Mapper.select${genConfig.tableAlias.toUpperCase()}List(${genConfig.tableAlias});
+	}
+	
+	public ${genConfig.tablePascalName}VO select${genConfig.tableAlias.toUpperCase()}(int ${genConfig.tableAlias}Num) {
+		return ${genConfig.tableAlias}Mapper.select${genConfig.tableAlias.toUpperCase()}(${genConfig.tableAlias}Num);
+	}
+		
+	public Map<String, Object> update${genConfig.tableAlias.toUpperCase()}(${genConfig.tablePascalName}VO ${genConfig.tableAlias}) {
+		Map<String, Object> rMap = new HashMap<>();
+		int rCnt = ${genConfig.tableAlias}Mapper.update${genConfig.tableAlias.toUpperCase()}(${genConfig.tableAlias});
+		if(rCnt != 1) {
+			throw new BizException("DB 등록 중 문제가 발생하였습니다. 다시 시도해주시기 바랍니다.");
+		}
+		rMap.put("cnt", rCnt);
+		rMap.put("result","ok");
+		return rMap;
+	}
+	
+	public Map<String, Object> insert${genConfig.tableAlias.toUpperCase()}(${genConfig.tablePascalName}VO ${genConfig.tableAlias}) {
+		Map<String, Object> rMap = new HashMap<>();
+		int rCnt = ${genConfig.tableAlias}Mapper.insert${genConfig.tableAlias.toUpperCase()}(${genConfig.tableAlias});
+		if(rCnt != 1) {
+			throw new BizException("DB 등록 중 문제가 발생하였습니다. 다시 시도해주시기 바랍니다.");
+		}
+		rMap.put("cnt", rCnt);
+		rMap.put("result","ok");
+		return rMap;
+	}
+	
+	public Map<String, Object> delete${genConfig.tableAlias.toUpperCase()}(List<Integer> nums) {
+		Map<String, Object> rMap = new HashMap<>();
+		int rCnt = 0;
+		for(int num : nums) {
+			rCnt += ${genConfig.tableAlias}Mapper.delete${genConfig.tableAlias.toUpperCase()}(num);
+		}
+		if(rCnt != nums.size()) {
+			throw new BizException("삭제 중 문제가 발생하였습니다. 다시 시도해주시기 바랍니다.");
+		}
+		rMap.put("cnt", rCnt);
+		rMap.put("result","ok");
+		return rMap;
+	}
+}

@@ -1,0 +1,102 @@
+#set ($H = "#")
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${genConfig.packageName}.mapper.${genConfig.mapperXmlName}">
+	<sql id="selectColumns">
+#foreach($col in $genColumns)
+		${genConfig.tableAlias}.${col.columnName.toUpperCase()}#if($foreach.hasNext || (!$foreach.hasNext && $genFkColumns.size() > 0)),
+#end
+#end
+#foreach($col in $genFkColumns)
+		${col.tableAlias}.${col.columnName.toUpperCase()}#if($foreach.hasNext),
+#end
+#end
+
+	</sql>
+	
+	<select id="select${genConfig.tableAlias.toUpperCase()}" resultType="${genConfig.tableAlias}">
+		SELECT 
+			<include refid="selectColumns"/>
+		FROM ${genConfig.tableName.toUpperCase()} ${genConfig.tableAlias}
+#foreach($tab in $genConfig.fkTableInfo)
+			LEFT JOIN ${tab.fkTableName.toUpperCase()} ${tab.fkTableAlias} ON ${tab.fkTableAlias}.${tab.fkTableAlias.toUpperCase()}_NUM = ${genConfig.tableAlias}.${tab.fkTableAlias.toUpperCase()}_NUM
+#end
+		WHERE ${genConfig.tableAlias}.${genConfig.tableAlias.toUpperCase()}_NUM = ${H}{${genConfig.tableAlias}Num}
+	</select>
+	
+	<select id="select${genConfig.tableAlias.toUpperCase()}List" resultType="${genConfig.tableAlias}">
+		SELECT 
+			<include refid="selectColumns"/>
+		FROM ${genConfig.tableName.toUpperCase()} ${genConfig.tableAlias}
+#foreach($tab in $genConfig.fkTableInfo)
+			LEFT JOIN ${tab.fkTableName.toUpperCase()} ${tab.fkTableAlias} ON ${tab.fkTableAlias}.${tab.fkTableAlias.toUpperCase()}_NUM = ${genConfig.tableAlias}.${tab.fkTableAlias.toUpperCase()}_NUM
+#end
+		<where>
+#foreach($col in $genColumns)
+			<if test='${col.jdbcVarName} != null and ${col.jdbcVarName} != ""'>
+				AND ${genConfig.tableAlias}.${col.columnName.toUpperCase()} = ${H}{${col.jdbcVarName}}
+			</if>
+#end
+#foreach($col in $genFkColumns)
+			<if test='${col.jdbcVarName} != null and ${col.jdbcVarName} != ""'>
+				AND ${col.tableAlias}.${col.columnName.toUpperCase()} = ${H}{${col.jdbcVarName}}
+			</if>
+#end
+		</where>
+		<trim prefix="order by">
+			<if test='orders!=null'>
+				${orders}
+			</if>
+		</trim>
+	</select>
+	
+	<insert id="insert${genConfig.tableAlias.toUpperCase()}" parameterType="${genConfig.tableAlias}" useGeneratedKeys="true" keyProperty="${genConfig.tableAlias}Num" keyColumn="${genConfig.tableAlias}_num">
+		INSERT INTO ${genConfig.tableName.toUpperCase()} (
+#foreach($col in $genColumns)
+#if($col.isPrimaryKey != "Y" && $col.columnName != "active")
+			<if test='${col.jdbcVarName} != null and ${col.jdbcVarName} != ""'>
+				${col.columnName.toUpperCase()},
+			</if>
+#end
+#end
+			CREDAT, CRETIM,
+			LMODAT, LMOTIM,
+			ACTIVE
+		) VALUES (
+#foreach($col in $genColumns)
+#if($col.isPrimaryKey != "Y" && $col.columnName != "active")
+			<if test='${col.jdbcVarName} != null and ${col.jdbcVarName} != ""'>
+				${H}{${col.jdbcVarName}},
+			</if>
+#end
+#end
+			TO_CHAR(CURRENT_DATE, 'YYYYMMDD'), TO_CHAR(CURRENT_TIMESTAMP, 'HH24MISS'),
+			TO_CHAR(CURRENT_DATE, 'YYYYMMDD'), TO_CHAR(CURRENT_TIMESTAMP, 'HH24MISS'),
+			'1'
+		)
+	</insert>
+
+	<update id="update${genConfig.tableAlias.toUpperCase()}">
+		UPDATE ${genConfig.tableName.toUpperCase()}
+		<set>
+#foreach($col in $genColumns)
+#if($col.isPrimaryKey != "Y")
+			<if test='${col.jdbcVarName} != null and ${col.jdbcVarName} != ""'>
+				${col.columnName.toUpperCase()} = ${H}{${col.jdbcVarName}},
+			</if>
+#end
+#end
+				LMODAT = TO_CHAR(CURRENT_DATE, 'YYYYMMDD'),
+				LMOTIM = TO_CHAR(CURRENT_TIMESTAMP, 'HH24MISS')
+		</set>
+		WHERE ${genConfig.tableAlias.toUpperCase()}_NUM = ${H}{${genConfig.tableAlias}Num}
+	</update>
+	
+	<delete id="delete${genConfig.tableAlias.toUpperCase()}">
+		UPDATE ${genConfig.tableName.toUpperCase()}
+			SET ACTIVE = 0,
+				LMODAT = TO_CHAR(CURRENT_DATE, 'YYYYMMDD'),
+				LMOTIM = TO_CHAR(CURRENT_TIMESTAMP, 'HH24MISS')
+		WHERE ${genConfig.tableAlias.toUpperCase()}_NUM = ${H}{${genConfig.tableAlias}Num}
+	</delete>
+</mapper>

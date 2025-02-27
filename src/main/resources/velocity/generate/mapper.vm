@@ -1,0 +1,15 @@
+package ${genConfig.packageName}.mapper;
+
+import org.mybatis.spring.annotation.MapperScan;
+
+import com.github.pagehelper.Page;
+import ${genConfig.packageName}.vo.${genConfig.tablePascalName}VO;
+
+@MapperScan
+public interface ${genConfig.mapperName} {
+	Page<${genConfig.tablePascalName}VO> select${genConfig.tableAlias.toUpperCase()}List(${genConfig.tablePascalName}VO ${genConfig.tableAlias});
+	${genConfig.tablePascalName}VO select${genConfig.tableAlias.toUpperCase()}(Integer ${genConfig.tableAlias}Num);
+	Integer update${genConfig.tableAlias.toUpperCase()}(${genConfig.tablePascalName}VO ${genConfig.tableAlias});
+	Integer insert${genConfig.tableAlias.toUpperCase()}(${genConfig.tablePascalName}VO ${genConfig.tableAlias});
+	Integer delete${genConfig.tableAlias.toUpperCase()}(Integer ${genConfig.tableAlias}Num);
+}

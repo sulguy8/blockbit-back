@@ -1,0 +1,20 @@
+package ${genConfig.packageName}.vo;
+
+import org.apache.ibatis.type.Alias;
+
+import ${genConfig.packageName}.common.vo.CommonVO;
+
+import lombok.Data;
+
+@Data
+@Alias("${genConfig.tableAlias}")
+public class ${genConfig.voName} extends CommonVO {
+#foreach($col in $genColumns)
+#if($col.jdbcVarName != "credat" && $col.jdbcVarName != "cretim" && $col.jdbcVarName != "lmodat" && $col.jdbcVarName != "lmotim" && $col.jdbcVarName != "active")
+	private ${col.javaType} ${col.jdbcVarName};
+#end
+#end
+#foreach($col in $genFkColumns)
+	private ${col.javaType} ${col.jdbcVarName};
+#end
+}

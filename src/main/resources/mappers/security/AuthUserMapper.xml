@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sg.bbit.security.mapper.AuthUserMapper">
+	<select id="authUserDetails" resultType="com.sg.bbit.security.vo.AuthUserDetails">
+		SELECT * FROM USER_INFO
+		WHERE USI_ID = #{usiId}
+	</select>
+
+	<select id="authUserRole" resultType="com.sg.bbit.security.vo.AuthUserRole">
+		SELECT *
+		FROM USI_ROI_MAPP urm
+			LEFT JOIN ROLE_INFO roi ON roi.ROI_NUM = urm.ROI_NUM
+		WHERE USI_NUM = #{usiNum}
+	</select>
+</mapper>

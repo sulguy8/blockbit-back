@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sg.bbit.generate.mapper.GenerateMapper">
+	<select id="selectDTI" resultType="com.sg.bbit.generate.vo.GenerateVO">
+		SELECT 
+			dti.DTI_NUM AS TABLE_NUM,
+			dti.DTI_NAME AS TABLE_NAME,
+			dti.DTI_ALIAS AS TABLE_ALIAS
+		FROM DB_TABLE_INFO dti
+		<where>
+			<if test='tableName != null and tableName != ""'>
+				AND dti.DTI_NAME = #{tableName}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectPAI" resultType="com.sg.bbit.generate.vo.GenerateVO">
+		SELECT 
+			pai.PAI_FK_COL_MAPP AS FK_COLUMN_MAPP
+		FROM PAGE_INFO pai
+		WHERE pai.DTI_NUM = #{tableNum}
+	</select>
+	
+	<select id="selectDCIList" resultType="com.sg.bbit.generate.vo.GenerateVO">
+		SELECT 
+			dci.DCI_NAME AS COLUMN_NAME,
+			dci.DCI_JAVA_TYPE AS JAVA_TYPE,
+			dci.DCI_IS_PK AS IS_PRIMARY_KEY,
+			dti.DTI_NAME AS TABLE_NAME,
+			dti.DTI_ALIAS AS TABLE_ALIAS
+		FROM DB_TABLE_INFO dti
+			LEFT JOIN DB_COLUMN_INFO dci ON dci.DTI_NUM = dti.DTI_NUM
+		<where>
+			<if test='tableName != null and tableName != ""'>
+				AND dti.DTI_NAME = #{tableName}
+			</if>
+			<if test='tableAlias != null and tableAlias != ""'>
+				AND dti.DTI_ALIAS = #{tableAlias}
+			</if>
+		</where>
+	</select>
+	
+	<select id="createDBInfo">
+		CALL proc_create_db_info();
+	</select>
+</mapper>

@@ -1,0 +1,17 @@
+datasource:
+  postgresql:
+    common:
+      jdbc-url: jdbc:log4jdbc:postgresql://runtime.co.kr:5432/sbl-report
+      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+      username: blockbit
+      password: blockbit
+      connectionTimeout: 30000
+      validationTimeout: 10000
+      maximumPoolSize: 1
+      minimumIdle: 1
+
+redis:
+  common: 
+    host: localhost
+    port: 6379
+    password: 1234

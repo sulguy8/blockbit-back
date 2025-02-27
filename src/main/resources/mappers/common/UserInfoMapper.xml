@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sg.bbit.mapper.UserInfoMapper">
+	<sql id="columns">
+		usi.USI_NUM,
+		usi.USI_ID,
+		usi.USI_PWD,
+		usi.USI_NAME,
+		usi.USI_PHONE_NUM,
+		usi.USI_EMAIL,
+		usi.USI_LAST_LOGIN,
+		usi.CREDAT,
+		usi.CRETIM,
+		usi.LMODAT,
+		usi.LMOTIM,
+		usi.ACTIVE,
+		usi.AFI_NUM
+	</sql>
+	
+	<select id="selectUSI" resultType="usi">
+		SELECT 
+			<include refid="columns"/>
+		FROM USER_INFO usi
+		WHERE usi.USI_NUM = #{usiNum}
+	</select>
+	
+	<select id="selectUSIList" resultType="usi">
+		SELECT 
+			<include refid="columns"/>
+		FROM USER_INFO usi
+		<where>
+			<if test='usiNum != null and usiNum != ""'>
+				AND usi.USI_NUM = #{usiNum}
+			</if>
+			<if test='usiId != null and usiId != ""'>
+				AND usi.USI_ID = #{usiId}
+			</if>
+			<if test='usiPwd != null and usiPwd != ""'>
+				AND usi.USI_PWD = #{usiPwd}
+			</if>
+			<if test='usiName != null and usiName != ""'>
+				AND usi.USI_NAME = #{usiName}
+			</if>
+			<if test='usiPhoneNum != null and usiPhoneNum != ""'>
+				AND usi.USI_PHONE_NUM = #{usiPhoneNum}
+			</if>
+			<if test='usiEmail != null and usiEmail != ""'>
+				AND usi.USI_EMAIL = #{usiEmail}
+			</if>
+			<if test='credat != null and credat != ""'>
+				AND usi.CREDAT = #{credat}
+			</if>
+			<if test='cretim != null and cretim != ""'>
+				AND usi.CRETIM = #{cretim}
+			</if>
+			<if test='lmodat != null and lmodat != ""'>
+				AND usi.LMODAT = #{lmodat}
+			</if>
+			<if test='lmotim != null and lmotim != ""'>
+				AND usi.LMOTIM = #{lmotim}
+			</if>
+			<if test='active != null and active != ""'>
+				AND usi.ACTIVE = #{active}
+			</if>
+			<if test='afiNum != null and afiNum != ""'>
+				AND usi.AFI_NUM = #{afiNum}
+			</if>
+		</where>
+		<trim prefix="order by">
+			<if test='orders!=null'>
+				${orders}
+			</if>
+		</trim>
+	</select>
+	
+	<insert id="insertUSI" parameterType="usi" useGeneratedKeys="true" keyProperty="usiNum" keyColumn="usi_num">
+		INSERT INTO USER_INFO (
+			<if test='usiNum != null and usiNum != ""'>
+				USI_NUM,
+			</if>
+			<if test='usiId != null and usiId != ""'>
+				USI_ID,
+			</if>
+			<if test='usiPwd != null and usiPwd != ""'>
+				USI_PWD,
+			</if>
+			<if test='usiName != null and usiName != ""'>
+				USI_NAME,
+			</if>
+			<if test='usiPhoneNum != null and usiPhoneNum != ""'>
+				USI_PHONE_NUM,
+			</if>
+			<if test='usiEmail != null and usiEmail != ""'>
+				USI_EMAIL,
+			</if>
+			<if test='usiLastLogin != null and usiLastLogin != ""'>
+				USI_LAST_LOGIN,
+			</if>
+			<if test='active != null and active != ""'>
+				ACTIVE,
+			</if>
+			<if test='afiNum != null and afiNum != ""'>
+				AFI_NUM,
+			</if>
+			CREDAT, CRETIM,
+			LMODAT, LMOTIM
+		) VALUES (
+			<if test='usiNum != null and usiNum != ""'>
+				#{usiNum},
+			</if>
+			<if test='usiId != null and usiId != ""'>
+				#{usiId},
+			</if>
+			<if test='usiPwd != null and usiPwd != ""'>
+				#{usiPwd},
+			</if>
+			<if test='usiName != null and usiName != ""'>
+				#{usiName},
+			</if>
+			<if test='usiPhoneNum != null and usiPhoneNum != ""'>
+				#{usiPhoneNum},
+			</if>
+			<if test='usiEmail != null and usiEmail != ""'>
+				#{usiEmail},
+			</if>
+			<if test='usiLastLogin != null and usiLastLogin != ""'>
+				#{usiLastLogin},
+			</if>
+			<if test='active != null and active != ""'>
+				#{active},
+			</if>
+			<if test='afiNum != null and afiNum != ""'>
+				#{afiNum},
+			</if>
+			TO_CHAR(CURRENT_DATE, 'YYYYMMDD'), TO_CHAR(CURRENT_TIMESTAMP, 'HH24MISS'),
+			TO_CHAR(CURRENT_DATE, 'YYYYMMDD'), TO_CHAR(CURRENT_TIMESTAMP, 'HH24MISS') 
+		)
+	</insert>
+
+	<update id="updateUSI">
+		UPDATE USER_INFO
+		<set>
+			<if test='usiNum != null and usiNum != ""'>
+				USI_NUM = #{usiNum},
+			</if>
+			<if test='usiId != null and usiId != ""'>
+				USI_ID = #{usiId},
+			</if>
+			<if test='usiPwd != null and usiPwd != ""'>
+				USI_PWD = #{usiPwd},
+			</if>
+			<if test='usiName != null and usiName != ""'>
+				USI_NAME = #{usiName},
+			</if>
+			<if test='usiPhoneNum != null and usiPhoneNum != ""'>
+				USI_PHONE_NUM = #{usiPhoneNum},
+			</if>
+			<if test='usiEmail != null and usiEmail != ""'>
+				USI_EMAIL = #{usiEmail},
+			</if>
+			<if test='usiLastLogin != null and usiLastLogin != ""'>
+				USI_LAST_LOGIN = #{usiLastLogin},
+			</if>
+			<if test='active != null and active != ""'>
+				ACTIVE = #{active},
+			</if>
+			<if test='afiNum != null and afiNum != ""'>
+				AFI_NUM = #{afiNum},
+			</if>
+				LMODAT = TO_CHAR(CURRENT_DATE, 'YYYYMMDD'),
+				LMOTIM = TO_CHAR(CURRENT_TIMESTAMP, 'HH24MISS')
+		</set>
+		WHERE USI_NUM = #{usiNum}
+	</update>
+	
+	<delete id="deleteUSI">
+		UPDATE USER_INFO
+			SET ACTIVE = 0,
+				LMODAT = TO_CHAR(CURRENT_DATE, 'YYYYMMDD'),
+				LMOTIM = TO_CHAR(CURRENT_TIMESTAMP, 'HH24MISS')
+		WHERE USI_NUM = #{usiNum}
+	</delete>
+</mapper>

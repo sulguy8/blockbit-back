@@ -1,0 +1,49 @@
+package ${genConfig.packageName}.controller;
+
+import java.io.Closeable;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import ${genConfig.packageName}.service.${genConfig.tablePascalName}Service;
+import ${genConfig.packageName}.common.vo.PaginationVO;
+import ${genConfig.packageName}.vo.${genConfig.tablePascalName}VO;
+
+import jakarta.annotation.Resource;
+
+@RestController
+public class ${genConfig.controllerName} {
+
+	@Resource
+	private ${genConfig.tablePascalName}Service ${genConfig.tableAlias}Service;
+
+	@GetMapping("/${genConfig.tableAlias}s")
+	public Closeable select${genConfig.tableAlias.toUpperCase()}List(${genConfig.tablePascalName}VO ${genConfig.tableAlias}, PaginationVO page){
+		return ${genConfig.tableAlias}Service.select${genConfig.tableAlias.toUpperCase()}List(${genConfig.tableAlias}, page);
+	}
+	
+	@GetMapping("/${genConfig.tableAlias}/{${genConfig.tableAlias}Num}")
+	public ${genConfig.tablePascalName}VO select${genConfig.tableAlias.toUpperCase()}(@PathVariable("${genConfig.tableAlias}Num") int ${genConfig.tableAlias}Num){
+		return ${genConfig.tableAlias}Service.select${genConfig.tableAlias.toUpperCase()}(${genConfig.tableAlias}Num);
+	}
+	
+	@PostMapping("/${genConfig.tableAlias}")
+	public Map<String, Object> insert${genConfig.tableAlias.toUpperCase()}(@RequestBody ${genConfig.tablePascalName}VO ${genConfig.tableAlias}) {
+		return ${genConfig.tableAlias}Service.insert${genConfig.tableAlias.toUpperCase()}(${genConfig.tableAlias});
+	}
+	
+	@PostMapping("/${genConfig.tableAlias}/mod")
+	public Map<String, Object> update${genConfig.tableAlias.toUpperCase()}(@RequestBody ${genConfig.tablePascalName}VO ${genConfig.tableAlias}) {
+		return ${genConfig.tableAlias}Service.update${genConfig.tableAlias.toUpperCase()}(${genConfig.tableAlias});
+	}
+	
+	@PostMapping("/${genConfig.tableAlias}/del")
+	public Map<String, Object> delete${genConfig.tableAlias.toUpperCase()}(@RequestBody List<Integer> nums) {
+		return ${genConfig.tableAlias}Service.delete${genConfig.tableAlias.toUpperCase()}(nums);
+	}
+}
