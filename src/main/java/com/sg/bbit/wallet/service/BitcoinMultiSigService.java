@@ -78,7 +78,7 @@ public class BitcoinMultiSigService {
         try {
             // 이전 트랜잭션 정보 (실제로는 UTXO 조회 필요)
             // 예시 목적으로 하드코딩 - 실제 구현에서는 API로 UTXO 조회
-            String prevTxId = "previous_tx_id_here";
+            String prevTxId = "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f";
             int prevOutputIndex = 0;
             long prevOutputValue = amountSatoshi + 1000; // 수수료 포함
             
