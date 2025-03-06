@@ -55,6 +55,16 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation group: 'com.github.pagehelper', name: 'pagehelper-spring-boot-starter', version: '2.1.0'
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.5.0'
+	
+	// 비트코인 관련 라이브러리
+	implementation 'org.bitcoinj:bitcoinj-core:0.16.2'
+	
+	// 이더리움 관련 라이브러리
+	implementation 'org.web3j:core:5.0.0'
+	implementation 'org.web3j:crypto:5.0.0'
+	
+	// MPC 라이브러리 - TSS(Threshold Signature Scheme) 구현체
+	implementation 'com.github.binance-chain:tss-lib:0.1.0'
 }
 
 tasks.named('test') {

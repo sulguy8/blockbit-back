@@ -13,6 +13,12 @@ web:
     allowed-headers: "*"
     url-pattern: /** 
 
+infura:
+  api-key: YOUR_TEST_INFURA_KEY
+
+bitcoin:
+  network: testnet
+
 generate:
   default-package: com.sg.bbit
   default-database-name: sbl-report
